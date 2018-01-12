@@ -86,10 +86,47 @@ for cycle=1:MCN
   food(i).fit=NEWFIT;
   food(i).x=NEWX;
   Trial(i)=0;
-  else
+ else
   Trial(i)=Trial(i)+1
-  end
-  end
+ end
+ end
  
+ %scout bee section 
+ Q=find(Trial>Limit);
+ 
+ for j=1:length(Q)
+ i=Q(j);
+ food(i).x=lb+rand(1,nvar).*(ub-lb);
+ food(i).fit=fitness(food(i).x);
+ Trial(i)=0;
+ end
+ [value,index]=min([food.fit]);
+ if value<gfood.fit
+  gfood=food(index);
+  end
+  best(cycle)=gfood.fit;
+  AVR(cycle)=mean([food.fit]);
+  disp(['   cycle= 'num2str(cycle) '  BEST = ' num2str(best(cycle))])
+  end 
+  
+  %%results 
+  disp('===================================================')
+  disp([ '   BEST SOLUTION=' num2str(gfood.x)]);
+  disp(['BEST fitness = ' num2str(gfood.fit)]);
+  disp(['   Time  =   ' num2str(toc)]);
+  
+  
+  figure(1)
+  plot(best(1:cycle),'r', 'LineWidth',2);
+  hold on
+  plot(AVR(1:cycle),'b','LineWidth',2);
+  
+  xlabel('CYCLE')
+  ylabel('Fitness')
+  
+  legend(' BEST ', '  MEAN')
+  title('ABC')
+  
+  
  
   
